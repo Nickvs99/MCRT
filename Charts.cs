@@ -24,13 +24,13 @@ public static class Charts
     }
 
     /// <summary>
-    /// Creates a Chart which displays the Chandrasekhar's solution.
+    /// Creates a Chart which displays intensity over the angle (in degrees) for various solutions.
     /// </summary>
     /// <param name="thetaMin">Minimum theta coodinate (in degrees)</param>
     /// <param name="thetaMax">Maximum theta coodinate (in degrees)</param>
     /// <param name="dTheta">Stepsize of theta (in degrees)</param>
     /// <returns></returns>
-    public static Chart CreateChandrasekharChart(double thetaMin, double thetaMax, double dTheta = 0.01)
+    public static Chart CreateIntensityChart(double thetaMin, double thetaMax, double dTheta = 0.01)
     {
         Chart chart = new Chart();
         chart.Size = new System.Drawing.Size(1280, 640);
@@ -42,12 +42,13 @@ public static class Charts
         chartArea.AxisX.Maximum = thetaMax;
         chartArea.AxisX.Interval = 15;
 
-        chartArea.AxisX.Title = "Theta(degrees)";
+        chartArea.AxisX.Title = "Theta (degrees)";
 
         chartArea.AxisY.IsStartedFromZero = false;
         chartArea.AxisY.Title = "I / H0";
 
         chart.Series.Add(ChartSeries.ChandrasekharSeries(thetaMin, thetaMax, dTheta));
+        chart.Series.Add(ChartSeries.MilneEddingtonSeries(thetaMin, thetaMax, dTheta));
 
         return chart;
     }
