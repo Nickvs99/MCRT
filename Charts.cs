@@ -17,8 +17,37 @@ public static class Charts
         chart.Size = new System.Drawing.Size(640, 320);
         chart.ChartAreas.Add("ChartArea1");
         chart.Legends.Add("legend1");
-
+        
         chart.Series.Add(ChartSeries.SineSeries(xMin, xMax, dx));
+
+        return chart;
+    }
+
+    /// <summary>
+    /// Creates a Chart which displays the Chandrasekhar's solution.
+    /// </summary>
+    /// <param name="thetaMin">Minimum theta coodinate (in degrees)</param>
+    /// <param name="thetaMax">Maximum theta coodinate (in degrees)</param>
+    /// <param name="dTheta">Stepsize of theta (in degrees)</param>
+    /// <returns></returns>
+    public static Chart CreateChandrasekharChart(double thetaMin, double thetaMax, double dTheta = 0.01)
+    {
+        Chart chart = new Chart();
+        chart.Size = new System.Drawing.Size(1280, 640);
+        chart.Legends.Add("legend1");
+
+
+        ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        chartArea.AxisX.Minimum = thetaMin;
+        chartArea.AxisX.Maximum = thetaMax;
+        chartArea.AxisX.Interval = 15;
+
+        chartArea.AxisX.Title = "Theta(degrees)";
+
+        chartArea.AxisY.IsStartedFromZero = false;
+        chartArea.AxisY.Title = "I / H0";
+
+        chart.Series.Add(ChartSeries.ChandrasekharSeries(thetaMin, thetaMax, dTheta));
 
         return chart;
     }

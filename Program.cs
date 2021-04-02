@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms.DataVisualization.Charting;
+﻿using System.Windows.Forms.DataVisualization.Charting;
 
 namespace MCRT
 {
@@ -7,8 +6,8 @@ namespace MCRT
     {
         static void Main(string[] args)
         {
-            Chart chart = Charts.CreateSineChart(0, 2 * Math.PI);
-            Charts.ShowSaveChart(chart, "sin_0_2pi.png");
+            Chart chart = Charts.CreateChandrasekharChart(0, 90, 0.5);
+            Charts.ShowSaveChart(chart, "Chandrasekhar.png");
         }
     }
 }   
