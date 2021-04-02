@@ -80,4 +80,31 @@ public static class ChartSeries
 
         return series;
     }
+
+    /// <summary>
+    /// Creates a Series conform the formula y = ax + b
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="xMin"></param>
+    /// <param name="xMax"></param>
+    /// <param name="label"></param>
+    /// <param name="dx"></param>
+    /// <returns></returns>
+    public static Series LinearSeries(double a, double b, double xMin, double xMax, string label, double dx=0.01)
+    {
+        Series series = new Series();
+        series.LegendText = label;
+        series.ChartType = SeriesChartType.Line;
+        series.BorderWidth = 2;
+
+        for (double x = xMin; x <= xMax; x += dx)
+        {
+            double y = a * x + b;
+
+            series.Points.AddXY(x, y);
+        }
+
+        return series;
+    }
 }

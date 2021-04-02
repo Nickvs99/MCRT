@@ -54,6 +54,34 @@ public static class Charts
     }
 
     /// <summary>
+    /// Creates a chart which displays the analytical solutions the mean intensity (J), flux (H), radiation pressure(K)
+    /// </summary>
+    /// <param name="tauMin">Minimum optical depth</param>
+    /// <param name="tauMax">Maximum optical depth</param>
+    /// <param name="dTau">Stepsize of the optical depth</param>
+    /// <returns></returns>
+    public static Chart CreateJHKChart(double tauMin, double tauMax, double dTau = 0.1)
+    {
+        Chart chart = new Chart();
+        chart.Size = new System.Drawing.Size(1280, 640);
+        chart.Legends.Add("legend1");
+
+        ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        chartArea.AxisX.Minimum = tauMin;
+        chartArea.AxisX.Maximum = tauMax;
+        chartArea.AxisX.Interval = 2;
+        chartArea.AxisX.Title = "Tau";
+
+        chartArea.AxisY.Title = "f / H0";
+
+        chart.Series.Add(ChartSeries.LinearSeries(3, 2, tauMin, tauMax, "J", dTau));
+        chart.Series.Add(ChartSeries.LinearSeries(0, 1, tauMin, tauMax, "H", dTau));
+        chart.Series.Add(ChartSeries.LinearSeries(1, 2/3, tauMin, tauMax, "K", dTau));
+
+        return chart;
+    }
+
+    /// <summary>
     /// Show and save a Chart object at a given path.
     /// </summary>
     /// <param name="chart"></param>
