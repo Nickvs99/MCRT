@@ -84,16 +84,14 @@ public static class Charts
     /// <summary>
     /// Create a chart, which displays both the analytical solutions and the MCRT.
     /// </summary>
-    /// <param name="nPhotons">The number of photons</param>
-    /// <param name="tauMax">The maximum optical depth.</param>
-    /// <param name="nMuCells">The number of cells</param>
+    /// <param name="sim">A completed Simulator object</param>
     /// <returns></returns>
-    public static Chart CreateMCRTChart(int nPhotons, double tauMax, int nMuCells)
+    public static Chart CreateMCRTChart(Simulator sim)
     {
         // Start  with the analytical solution charts
         Chart chart = CreateIntensityChart(0, 90, 0.5);
         
-        chart.Series.Add(ChartSeries.MCRTSeries(nPhotons, tauMax, nMuCells));
+        chart.Series.Add(ChartSeries.MCRTSeries(sim));
         return chart;
     }
 

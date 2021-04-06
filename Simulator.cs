@@ -2,12 +2,12 @@
 
 public class Simulator
 {
-    private int nPhotons;
-    private double tauMax;
+    public int nPhotons;
+    public double tauMax;
 
-    private int[] muCells;
-    private int nMuCells;
-    private double muCellWidth;
+    public int[] muCells;
+    public int nMuCells;
+    public double muCellWidth;
 
     public Simulator(int _nPhotons, double _tauMax, int _nMuCells)
     {
@@ -20,7 +20,7 @@ public class Simulator
         muCells = new int[nMuCells];
     }
 
-    public int[] Run()
+    public void Run()
     {
         // Simulate n photons
         for (int i = 0; i < nPhotons; i++)
@@ -38,7 +38,5 @@ public class Simulator
             }
         }
         Console.WriteLine();
-
-        return muCells;
     }
 }

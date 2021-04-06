@@ -111,11 +111,9 @@ public static class ChartSeries
     /// <summary>
     /// Creates a Series with the results of a MCRT simulation.
     /// </summary>
-    /// <param name="nPhotons">The number of photons</param>
-    /// <param name="tauMax">The maximum optical depth</param>
-    /// <param name="nMuCells">The number of cells</param>
+    /// <param name="sim">A completed Simulator object</param>
     /// <returns></returns>
-    public static Series MCRTSeries(int nPhotons, double tauMax, int nMuCells)
+    public static Series MCRTSeries(Simulator sim)
     {
         Series series = new Series();
         series.LegendText = "MCRT";
@@ -123,26 +121,21 @@ public static class ChartSeries
         series.YValuesPerPoint = 3;
         series.CustomProperties = $"PointWidth=2";
 
-        Simulator sim = new Simulator(nPhotons, tauMax, nMuCells);
-        int[] muCells = sim.Run();
-
-        double muCellWidth = 1.0 / nMuCells;
-
         // Start at the center of the first cell
-        double mu = muCellWidth / 2.0;
+        double mu = sim.muCellWidth / 2.0;
 
-        for(int i = 0; i < muCells.Length; i++)
+        for(int i = 0; i < sim.muCells.Length; i++)
         {
             // Convert mu value to degrees
             double degree = Math.Acos(mu) * 180.0 / Math.PI;
 
             // Calculate the normalized intensity
-            double IOverH0 = 2 * muCells[i] / (mu * muCellWidth * nPhotons);
+            double IOverH0 = 2 * sim.muCells[i] / (mu * sim.muCellWidth * sim.nPhotons);
 
-            double error = IOverH0 / (double) Math.Sqrt(muCells[i]);
+            double error = IOverH0 / (double) Math.Sqrt(sim.muCells[i]);
             series.Points.AddXY(degree,IOverH0, IOverH0 - error, IOverH0 + error);
 
-            mu += muCellWidth;
+            mu += sim.muCellWidth;
         }
 
         return series;
