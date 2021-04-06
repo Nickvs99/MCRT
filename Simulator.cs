@@ -31,7 +31,13 @@ public class Simulator
             // Map mu to the right box
             int index = (int)Math.Floor(mu / muCellWidth);
             muCells[index] += 1;
+
+            if(i % 50000 == 0)
+            {
+                Console.Write($"\rCurrent photon package: {i} of {nPhotons}");
+            }
         }
+        Console.WriteLine();
 
         return muCells;
     }
