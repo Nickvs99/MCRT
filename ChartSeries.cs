@@ -119,7 +119,9 @@ public static class ChartSeries
     {
         Series series = new Series();
         series.LegendText = "MCRT";
-        series.ChartType = SeriesChartType.Line;
+        series.ChartType = SeriesChartType.ErrorBar;
+        series.YValuesPerPoint = 3;
+        series.CustomProperties = $"PointWidth=2";
 
         Simulator sim = new Simulator(nPhotons, tauMax, nMuCells);
         int[] muCells = sim.Run();
@@ -137,7 +139,8 @@ public static class ChartSeries
             // Calculate the normalized intensity
             double IOverH0 = 2 * muCells[i] / (mu * muCellWidth * nPhotons);
 
-            series.Points.AddXY(degree, IOverH0);
+            double error = IOverH0 / (double) Math.Sqrt(muCells[i]);
+            series.Points.AddXY(degree,IOverH0, IOverH0 - error, IOverH0 + error);
 
             mu += muCellWidth;
         }
