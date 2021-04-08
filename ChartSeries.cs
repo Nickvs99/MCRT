@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms.DataVisualization.Charting;
 
 public static class ChartSeries
@@ -37,18 +38,8 @@ public static class ChartSeries
         series.LegendText = "Chandrasekhar";
         series.ChartType = SeriesChartType.Line;
         series.BorderWidth = 2;
-       
 
-        for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
-        {
-            // Map the angle in degrees to radians
-            double x = Math.Cos(theta * Math.PI / 180);
-
-            // Chandrasekhar's solution
-            double y = 3.0 * (x + 0.70692 - 0.08392 / (1.0 + 4.45808 * x) - 0.03619 / (1.0 + 1.59178 * x) - 0.00946 / (1.0 + 1.10319 * x));
-
-            series.Points.AddXY(theta, y);
-        }
+        AddData(series, ChartData.Chandrasekhar(thetaMin, thetaMax, dTheta));
 
         return series;
     }
@@ -67,16 +58,7 @@ public static class ChartSeries
         series.ChartType = SeriesChartType.Line;
         series.BorderWidth = 2;
 
-        for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
-        {
-            // Map the angle in degrees to radians
-            double x = Math.Cos(theta * Math.PI / 180);
-
-            // Milne-Eddington's solution
-            double y = 3.0 * x + 2;
-
-            series.Points.AddXY(theta, y);
-        }
+        AddData(series, ChartData.MilneEddington(thetaMin, thetaMax, dTheta));
 
         return series;
     }
@@ -98,12 +80,7 @@ public static class ChartSeries
         series.ChartType = SeriesChartType.Line;
         series.BorderWidth = 2;
 
-        for (double x = xMin; x <= xMax; x += dx)
-        {
-            double y = a * x + b;
-
-            series.Points.AddXY(x, y);
-        }
+        AddData(series, ChartData.LinearData(a, b, xMin, xMax, dx));
 
         return series;
     }
@@ -121,22 +98,7 @@ public static class ChartSeries
         series.YValuesPerPoint = 3;
         series.CustomProperties = $"PointWidth=2";
 
-        // Start at the center of the first cell
-        double mu = sim.muCellWidth / 2.0;
-
-        for(int i = 0; i < sim.muCells.Length; i++)
-        {
-            // Convert mu value to degrees
-            double degree = Math.Acos(mu) * 180.0 / Math.PI;
-
-            // Calculate the normalized intensity
-            double IOverH0 = 2 * sim.muCells[i] / (mu * sim.muCellWidth * sim.nPhotons);
-
-            double error = IOverH0 / (double) Math.Sqrt(sim.muCells[i]);
-            series.Points.AddXY(degree,IOverH0, IOverH0 - error, IOverH0 + error);
-
-            mu += sim.muCellWidth;
-        }
+        AddDataError(series, ChartData.MCRTMuData(sim));
 
         return series;
     }
@@ -151,12 +113,8 @@ public static class ChartSeries
         Series series = new Series();
         series.LegendText = "MCRT J";
         series.ChartType = SeriesChartType.Line;
-        
-        for(int i = 0; i < sim.jBoundaries.Length - 1; i++)
-        {
-            // y value is in the middle of the two boundaries and scaled to the number of photons.
-            series.Points.AddXY(sim.taus[i], 0.5 * (sim.jBoundaries[i] + sim.jBoundaries[i + 1]) / (double) sim.nPhotons);
-        }
+
+        AddData(series, ChartData.MCRTRadiatonMoments(sim, sim.jBoundaries));
 
         return series;
     }
@@ -172,11 +130,7 @@ public static class ChartSeries
         series.LegendText = "MCRT H";
         series.ChartType = SeriesChartType.Line;
 
-        for (int i = 0; i < sim.hBoundaries.Length - 1; i++)
-        {
-            // y value is in the middle of the two boundaries and scaled to the number of photons.
-            series.Points.AddXY(sim.taus[i], 0.5 * (sim.hBoundaries[i] + sim.hBoundaries[i + 1]) / (double)sim.nPhotons);
-        }
+        AddData(series, ChartData.MCRTRadiatonMoments(sim, sim.hBoundaries));
 
         return series;
     }
@@ -192,13 +146,26 @@ public static class ChartSeries
         series.LegendText = "MCRT K";
         series.ChartType = SeriesChartType.Line;
 
-        for (int i = 0; i < sim.kBoundaries.Length - 1; i++)
-        {
-            // y value is in the middle of the two boundaries and scaled to the number of photons.
-            // TODO: The k values dont match the analytical solution. A added vertical -0.5 offset seems to make it work...           
-            series.Points.AddXY(sim.taus[i], 0.5 * (sim.kBoundaries[i] + sim.kBoundaries[i + 1]) / (double)sim.nPhotons);
-        }
+        // TODO: The k values dont match the analytical solution. A vertical -0.5 offset seems to make it work...           
+        AddData(series, ChartData.MCRTRadiatonMoments(sim, sim.jBoundaries));
 
         return series;
+    }
+
+    private static void AddData(Series series, List<Tuple<double, double>> data)
+    {
+        foreach (Tuple<double, double> dataPoint in data)
+        {
+            series.Points.AddXY(dataPoint.Item1, dataPoint.Item2);
+        }
+
+    }
+
+    private static void AddDataError(Series series, List<Tuple<double, double, double, double>> data)
+    {
+        foreach (Tuple<double, double, double, double> dataPoint in data)
+        {
+            series.Points.AddXY(dataPoint.Item1, dataPoint.Item2, dataPoint.Item3, dataPoint.Item4);
+        }
     }
 }
