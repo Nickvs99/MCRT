@@ -47,17 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Chart\ChartSeries.cs" />
-    <Compile Include="Chart\Charts.cs" />
-    <Compile Include="Chart\ChartData.cs" />
-    <Compile Include="DataPoint.cs" />
-    <Compile Include="Photon.cs" />
-    <Compile Include="RNG.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="Simulator.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Code\Chart\ChartSeries.cs" />
+    <Compile Include="Code\Chart\Charts.cs" />
+    <Compile Include="Code\Chart\ChartData.cs" />
+    <Compile Include="Code\DataPoint.cs" />
+    <Compile Include="Code\Photon.cs" />
+    <Compile Include="Code\RNG.cs" />
+    <Compile Include="Code\Settings.cs" />
+    <Compile Include="Code\Simulator.cs" />
+    <Compile Include="Code\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Vector.cs" />
+    <Compile Include="Code\Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

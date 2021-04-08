@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -13,21 +14,18 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateIntensityChart(double thetaMin, double thetaMax, double dTheta = 0.01)
     {
-        Chart chart = new Chart
-        {
-            Size = new System.Drawing.Size(1280, 640)
-        };
-        chart.Legends.Add("legend1");
-
+        Chart chart = CreateBaseChart();
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        ApplyBaseFont(chartArea);
+
         chartArea.AxisX.Minimum = thetaMin;
         chartArea.AxisX.Maximum = thetaMax;
         chartArea.AxisX.Interval = 15;
-
         chartArea.AxisX.Title = "Theta (degrees)";
 
         chartArea.AxisY.IsStartedFromZero = false;
         chartArea.AxisY.Title = "I / H0";
+
 
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.Chandrasekhar(thetaMin, thetaMax, dTheta), "Chandrasekhar"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MilneEddington(thetaMin, thetaMax, dTheta), "Milne-Eddington"));
@@ -44,13 +42,10 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateJHKChart(double tauMin, double tauMax, double dTau = 0.1)
     {
-        Chart chart = new Chart
-        {
-            Size = new System.Drawing.Size(1280, 640)
-        };
-        chart.Legends.Add("legend1");
-
+        Chart chart = CreateBaseChart();
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        ApplyBaseFont(chartArea);
+        
         chartArea.AxisX.Minimum = tauMin;
         chartArea.AxisX.Maximum = tauMax;
         chartArea.AxisX.Interval = 2;
@@ -102,13 +97,9 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateEddingtonFactorsChart(Simulator sim)
     {
-        Chart chart = new Chart
-        {
-            Size = new System.Drawing.Size(1280, 640)
-        };
-        chart.Legends.Add("legend1");
-
+        Chart chart = CreateBaseChart();     
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        ApplyBaseFont(chartArea);
 
         chartArea.AxisX.Minimum = 0;
         chartArea.AxisX.Maximum = sim.tauMax;
@@ -123,6 +114,31 @@ public static class Charts
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJNumeric(sim), "K / J Numeric"));
 
         return chart;
+    }
+
+    private static Chart CreateBaseChart()
+    {
+        Chart chart = new Chart
+        {
+            Size = new Size(1280, 640)
+        };
+
+        Legend legend = chart.Legends.Add("legend1");
+        legend.Font = new Font("Trebuchet MS", 15f);
+
+        return chart;
+    }
+
+    private static void ApplyBaseFont(ChartArea area)
+    {
+        Font titleFont = new Font("Trebuchet MS", 15f);
+        Font labelFont = new Font("Trebuchet MS", 12f);
+       
+        area.AxisX.TitleFont = titleFont;
+        area.AxisY.TitleFont = titleFont;
+
+        area.AxisX.LabelStyle.Font = labelFont;
+        area.AxisY.LabelStyle.Font = labelFont;   
     }
 
     /// <summary>
