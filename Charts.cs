@@ -96,6 +96,22 @@ public static class Charts
     }
 
     /// <summary>
+    /// Creates a chart, which displays both the analytical solutions and the the MCRT results for
+    /// the mean intensity, flux and radiation pressure.
+    /// </summary>
+    /// <param name="sim">A completed Simulator object</param>
+    /// <returns></returns>
+    public static Chart CreateMCRTJHKChart(Simulator sim)
+    {
+        Chart chart = CreateJHKChart(0, sim.tauMax, 1);
+        chart.Series.Add(ChartSeries.MCRTJSeries(sim));
+        chart.Series.Add(ChartSeries.MCRTHSeries(sim));
+        chart.Series.Add(ChartSeries.MCRTKSeries(sim));
+        
+        return chart;
+    }
+
+    /// <summary>
     /// Show and save a Chart object at a given path.
     /// </summary>
     /// <param name="chart"></param>

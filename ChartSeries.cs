@@ -140,4 +140,65 @@ public static class ChartSeries
 
         return series;
     }
+
+    /// <summary>
+    /// Creates a series of the mean intensity results.
+    /// </summary>
+    /// <param name="sim">A completed Simulator object</param>
+    /// <returns></returns>
+    public static Series MCRTJSeries(Simulator sim)
+    {
+        Series series = new Series();
+        series.LegendText = "MCRT J";
+        series.ChartType = SeriesChartType.Line;
+        
+        for(int i = 0; i < sim.jBoundaries.Length - 1; i++)
+        {
+            // y value is in the middle of the two boundaries and scaled to the number of photons.
+            series.Points.AddXY(sim.taus[i], 0.5 * (sim.jBoundaries[i] + sim.jBoundaries[i + 1]) / (double) sim.nPhotons);
+        }
+
+        return series;
+    }
+
+    /// <summary>
+    /// Creates a series of the flux.
+    /// </summary>
+    /// <param name="sim">A completed Simulator object</param>
+    /// <returns></returns>
+    public static Series MCRTHSeries(Simulator sim)
+    {
+        Series series = new Series();
+        series.LegendText = "MCRT H";
+        series.ChartType = SeriesChartType.Line;
+
+        for (int i = 0; i < sim.hBoundaries.Length - 1; i++)
+        {
+            // y value is in the middle of the two boundaries and scaled to the number of photons.
+            series.Points.AddXY(sim.taus[i], 0.5 * (sim.hBoundaries[i] + sim.hBoundaries[i + 1]) / (double)sim.nPhotons);
+        }
+
+        return series;
+    }
+
+    /// <summary>
+    /// Creates a series of the radiation pressure.
+    /// </summary>
+    /// <param name="sim">A completed Simulator object</param>
+    /// <returns></returns>
+    public static Series MCRTKSeries(Simulator sim)
+    {
+        Series series = new Series();
+        series.LegendText = "MCRT K";
+        series.ChartType = SeriesChartType.Line;
+
+        for (int i = 0; i < sim.kBoundaries.Length - 1; i++)
+        {
+            // y value is in the middle of the two boundaries and scaled to the number of photons.
+            // TODO: The k values dont match the analytical solution. A added vertical -0.5 offset seems to make it work...           
+            series.Points.AddXY(sim.taus[i], 0.5 * (sim.kBoundaries[i] + sim.kBoundaries[i + 1]) / (double)sim.nPhotons);
+        }
+
+        return series;
+    }
 }

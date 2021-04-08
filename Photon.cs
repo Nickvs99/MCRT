@@ -2,12 +2,13 @@
 
 public class Photon
 {
-    private Vector position;
+    public Vector position;
+    public bool isFinished;
 
     private double phi;
 
     private double _mu;
-    private double mu {
+    public double mu {
         get {
             return _mu;
         }
@@ -25,33 +26,27 @@ public class Photon
     {
         position = new Vector(0, 0, 0);
         tauMax = _tauMax;
+
+        isFinished = false;
+
+        ApplyInitialScattering();
     }
 
-    /// <summary>
-    /// Simulate a photon in a simple atmosphere. 
-    /// </summary>
-    /// <returns>The mu value of the photon, when it escapes the atmosphere</returns>
-    public double Simulate()
+    public void LateUpdate()
     {
-        ApplyInitialScattering();
-
-        while(true)
+        if (position.Z < 0)
         {
-            UpdatePosition();
-
-            if(position.Z < 0)
-            {
-                // Re-emit photon
-                position = new Vector(0, 0, 0);
-                ApplyInitialScattering();
-                continue;
-            }
-            else if(position.Z > 1)
-            {
-                // Photons has escaped from atmosphere
-                return mu;
-            }
-
+            // Re-emit photon
+            position = new Vector(0, 0, 0);
+            ApplyInitialScattering();
+        }
+        else if (position.Z > 1)
+        {
+            // Photons has escaped from atmosphere
+            isFinished = true;
+        }
+        else
+        {
             ApplyIsotropicScattering();
         }
     }
@@ -74,7 +69,7 @@ public class Photon
         phi = 2 * Math.PI * r2;
     }
 
-    private void UpdatePosition()
+    public void UpdatePosition()
     {
         // Get a random distance to the next scattering event.
         double r = RNG.rand.NextDouble();
