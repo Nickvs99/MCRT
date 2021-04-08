@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 
 public class Simulator
 {
@@ -46,6 +48,8 @@ public class Simulator
 
     public void Run()
     {
+        List<int> scatterCounters = new List<int>();
+
         // Simulate n photons
         for (int i = 0; i < nPhotons; i++)
         {
@@ -57,6 +61,8 @@ public class Simulator
 
             }
 
+            scatterCounters.Add(photon.scatterCounter);
+
             // Map mu to the right box
             int index = muMapper(photon.mu);
             muCells[index] += 1;
@@ -67,6 +73,7 @@ public class Simulator
             }
         }
         Console.WriteLine();
+        Console.WriteLine($"Avg scatter events: {scatterCounters.Average()} +- {Statistics.CalcStdDev(scatterCounters)}");
     }
 
     private void UpdatePhoton(Photon photon)

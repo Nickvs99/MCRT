@@ -25,23 +25,20 @@ public class Photon
 
     private double tauMax;
 
+    public int scatterCounter;
+
     public Photon(double _tauMax)
     {
-        position = new Vector(0, 0, 0);
         tauMax = _tauMax;
-
         isFinished = false;
-
-        ApplyInitialScattering();
+        Reset();
     }
 
     public void LateUpdate()
     {
         if (position.Z < 0)
         {
-            // Re-emit photon
-            position = new Vector(0, 0, 0);
-            ApplyInitialScattering();
+            Reset();
         }
         else if (position.Z > 1)
         {
@@ -70,6 +67,8 @@ public class Photon
 
         mu = 2 * r1 - 1;
         phi = 2 * Math.PI * r2;
+
+        scatterCounter++;
     }
 
     public void UpdatePosition()
@@ -88,6 +87,13 @@ public class Photon
         );
 
         position.Add(displacement);
+    }
+
+    private void Reset()
+    {
+        position = new Vector(0, 0, 0);
+        ApplyInitialScattering();
+        scatterCounter = 0;
     }
 }
 
