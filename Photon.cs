@@ -8,11 +8,14 @@ public class Photon
     private double phi;
 
     private double _mu;
-    public double mu {
-        get {
+    public double mu
+    {
+        get
+        {
             return _mu;
         }
-        set {
+        set
+        {
             _mu = value;
             theta = Math.Acos(mu);
         }

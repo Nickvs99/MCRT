@@ -20,4 +20,4 @@ namespace MCRT
             Charts.ShowSaveChart(EddingtonFactorChart, "EddingtonFactor.png");
         }
     }
-}   
+}

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public static class ChartData
 {
 
-    public static List<DataPoint> Chandrasekhar(double thetaMin, double thetaMax, double dTheta=0.01)
+    public static List<DataPoint> Chandrasekhar(double thetaMin, double thetaMax, double dTheta = 0.01)
     {
         List<DataPoint> data = new List<DataPoint>();
         for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
@@ -52,6 +52,7 @@ public static class ChartData
 
             data.Add(new DataPoint(x, y));
         }
+
         return data;
     }
 
@@ -70,11 +71,12 @@ public static class ChartData
             double IOverH0 = 2 * sim.muCells[i] / (mu * sim.muCellWidth * sim.nPhotons);
 
             double error = IOverH0 / (double)Math.Sqrt(sim.muCells[i]);
-            
+
             data.Add(new DataPointError(degree, IOverH0, IOverH0 - error, IOverH0 + error));
 
             mu += sim.muCellWidth;
         }
+
         return data;
     }
 
@@ -88,28 +90,29 @@ public static class ChartData
             // y value is in the middle of the two boundaries and scaled to the number of photons.
             double y = 0.5 * (boundaryValues[i] + boundaryValues[i + 1]) / (double)sim.nPhotons;
 
-           data.Add(new DataPoint(x, y));
+            data.Add(new DataPoint(x, y));
         }
 
         return data;
     }
 
-    public static List<DataPoint> HOVerJAnalytic(double thetaMin, double thetaMax, double dTheta=0.1)
+    public static List<DataPoint> HOVerJAnalytic(double thetaMin, double thetaMax, double dTheta = 0.1)
     {
         List<DataPoint> hData = LinearData(0, 1, thetaMin, thetaMax, dTheta);
         List<DataPoint> jData = LinearData(3, 2, thetaMin, thetaMax, dTheta);
 
         List<DataPoint> data = new List<DataPoint>();
-        for(int i = 0; i < jData.Count; i++)
+        for (int i = 0; i < jData.Count; i++)
         {
             data.Add(new DataPoint(hData[i].x, hData[i].y / jData[i].y));
         }
+
         return data;
     }
 
     public static List<DataPoint> KOVerJAnalytic(double thetaMin, double thetaMax, double dTheta = 0.1)
     {
-        List<DataPoint> kData = LinearData(1, 2.0/3.0, thetaMin, thetaMax, dTheta);
+        List<DataPoint> kData = LinearData(1, 2.0 / 3.0, thetaMin, thetaMax, dTheta);
         List<DataPoint> jData = LinearData(3, 2, thetaMin, thetaMax, dTheta);
 
         List<DataPoint> data = new List<DataPoint>();
@@ -117,6 +120,7 @@ public static class ChartData
         {
             data.Add(new DataPoint(kData[i].x, kData[i].y / jData[i].y));
         }
+
         return data;
     }
 
@@ -124,12 +128,13 @@ public static class ChartData
     {
         List<DataPoint> kData = MCRTRadiatonMoments(sim, sim.kBoundaries);
         List<DataPoint> jData = MCRTRadiatonMoments(sim, sim.jBoundaries);
-        
+
         List<DataPoint> data = new List<DataPoint>();
         for (int i = 0; i < jData.Count; i++)
         {
             data.Add(new DataPoint(kData[i].x, kData[i].y / jData[i].y));
         }
+
         return data;
     }
 
@@ -143,8 +148,8 @@ public static class ChartData
         {
             data.Add(new DataPoint(hData[i].x, hData[i].y / jData[i].y));
         }
+
         return data;
     }
 }
 
-        

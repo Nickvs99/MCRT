@@ -6,10 +6,10 @@ public class Simulator
     public double tauMax;
 
     public int[] muCells;
-    
+
     public int nZCells;
     public int nMuCells;
-    
+
     public double muCellWidth;
     public double zCellHeight;
 
@@ -38,7 +38,7 @@ public class Simulator
 
         taus = new double[nZCells];
         taus[0] = tauMax - 0.5 * tauMax / nZCells;
-        for(int i = 1; i < taus.Length; i++)
+        for (int i = 1; i < taus.Length; i++)
         {
             taus[i] = taus[i - 1] - tauMax / nZCells;
         }
@@ -51,7 +51,7 @@ public class Simulator
         {
             Photon photon = new Photon(tauMax);
 
-            while(!photon.isFinished)
+            while (!photon.isFinished)
             {
                 UpdatePhoton(photon);
 
@@ -61,7 +61,7 @@ public class Simulator
             int index = muMapper(photon.mu);
             muCells[index] += 1;
 
-            if(i % 50000 == 0)
+            if (i % 50000 == 0)
             {
                 Console.Write($"\rCurrent photon package: {i} of {nPhotons}");
             }
@@ -76,7 +76,7 @@ public class Simulator
         double z1 = photon.position.Z;
 
         UpdateBoundaryValues(photon, z0, z1);
- 
+
         photon.LateUpdate();
     }
 

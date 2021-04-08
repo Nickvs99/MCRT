@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms.DataVisualization.Charting;
 
 public static class ChartSeries
@@ -11,11 +10,13 @@ public static class ChartSeries
     /// <returns></returns>
     public static Series MCRTSeries(Simulator sim)
     {
-        Series series = new Series();
-        series.LegendText = "MCRT";
-        series.ChartType = SeriesChartType.ErrorBar;
-        series.YValuesPerPoint = 3;
-        series.CustomProperties = $"PointWidth=2";
+        Series series = new Series
+        {
+            LegendText = "MCRT",
+            ChartType = SeriesChartType.ErrorBar,
+            YValuesPerPoint = 3,
+            CustomProperties = $"PointWidth=2"
+        };
 
         AddDataError(series, ChartData.MCRTMuData(sim));
 
@@ -28,12 +29,14 @@ public static class ChartSeries
     /// <param name="data">The list of datapoints</param>
     /// <param name="label">The label for the series. Shows up in the legend.</param>
     /// <returns></returns>
-    public static Series SimpleLineSeries(List<DataPoint> data, string label="Temporary")
+    public static Series SimpleLineSeries(List<DataPoint> data, string label = "Temporary")
     {
-        Series series = new Series();
-        series.LegendText = label;
-        series.ChartType = SeriesChartType.Line;
-        series.BorderWidth = 2;
+        Series series = new Series
+        {
+            LegendText = label,
+            ChartType = SeriesChartType.Line,
+            BorderWidth = 2
+        };
 
         AddData(series, data);
 

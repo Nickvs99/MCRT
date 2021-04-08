@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -14,10 +13,11 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateIntensityChart(double thetaMin, double thetaMax, double dTheta = 0.01)
     {
-        Chart chart = new Chart();
-        chart.Size = new System.Drawing.Size(1280, 640);
+        Chart chart = new Chart
+        {
+            Size = new System.Drawing.Size(1280, 640)
+        };
         chart.Legends.Add("legend1");
-
 
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
         chartArea.AxisX.Minimum = thetaMin;
@@ -44,8 +44,10 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateJHKChart(double tauMin, double tauMax, double dTau = 0.1)
     {
-        Chart chart = new Chart();
-        chart.Size = new System.Drawing.Size(1280, 640);
+        Chart chart = new Chart
+        {
+            Size = new System.Drawing.Size(1280, 640)
+        };
         chart.Legends.Add("legend1");
 
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
@@ -72,7 +74,7 @@ public static class Charts
     {
         // Start  with the analytical solution charts
         Chart chart = CreateIntensityChart(0, 90, 0.5);
-        
+
         chart.Series.Add(ChartSeries.MCRTSeries(sim));
         return chart;
     }
@@ -89,7 +91,7 @@ public static class Charts
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.jBoundaries), "MCRT J"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.hBoundaries), "MCRT H"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.kBoundaries), "MCRT K"));
-        
+
         return chart;
     }
 
@@ -100,12 +102,14 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateEddingtonFactorsChart(Simulator sim)
     {
-        Chart chart = new Chart();
-        chart.Size = new System.Drawing.Size(1280, 640);
+        Chart chart = new Chart
+        {
+            Size = new System.Drawing.Size(1280, 640)
+        };
         chart.Legends.Add("legend1");
 
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
-        
+
         chartArea.AxisX.Minimum = 0;
         chartArea.AxisX.Maximum = sim.tauMax;
         chartArea.AxisX.Title = "Tau";
@@ -138,8 +142,7 @@ public static class Charts
     /// <param name="chart"></param>
     /// <param name="path"></param>
     public static void SaveChart(Chart chart, string path)
-    {        
-        // Save and open chart
+    {
         string chartPath = path;
         chart.SaveImage(chartPath, ImageFormat.Png);
     }
