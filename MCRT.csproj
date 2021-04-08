@@ -53,6 +53,7 @@
     <Compile Include="DataPoint.cs" />
     <Compile Include="Photon.cs" />
     <Compile Include="RNG.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Simulator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,7 @@ namespace MCRT
         static void Main(string[] args)
         {
 
-            Simulator sim = new Simulator(500000, 10, 50, 200);
+            Simulator sim = new Simulator(Settings.nPhotons, Settings.tauMax, Settings.nMuCells, Settings.nZCells);
             sim.Run();
 
             Chart MCRTChart = Charts.CreateMCRTChart(sim);
