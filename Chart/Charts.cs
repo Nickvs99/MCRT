@@ -111,6 +111,20 @@ public static class Charts
         return chart;
     }
 
+    public static Chart CreateEddingtonFactorsChart(Simulator sim)
+    {
+        Chart chart = new Chart();
+        chart.Size = new System.Drawing.Size(1280, 640);
+        chart.Legends.Add("legend1");
+
+        chart.Series.Add(ChartSeries.HOverJAnalyticSeries(0, sim.tauMax, 1));
+        chart.Series.Add(ChartSeries.KOverJAnalyticSeries(0, sim.tauMax, 1));
+        chart.Series.Add(ChartSeries.HOverJNumericSeries(0, sim.tauMax, 1));
+        chart.Series.Add(ChartSeries.KOverJNumericSeries(0, sim.tauMax, 1));
+
+        return chart;
+    }
+
     /// <summary>
     /// Show and save a Chart object at a given path.
     /// </summary>

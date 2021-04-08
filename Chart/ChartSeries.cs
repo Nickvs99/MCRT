@@ -152,6 +152,47 @@ public static class ChartSeries
         return series;
     }
 
+    public static Series HOverJAnalyticSeries(double tauMin, double tauMax, double dTau = 0.01)
+    {
+        Series series = new Series();
+        series.LegendText = "H / J analytic";
+        series.ChartType = SeriesChartType.Line;
+
+        AddData(series, ChartData.HOVerJAnalytic(tauMin, tauMax, dTau));
+        return series;
+    }
+
+    public static Series KOverJAnalyticSeries(double tauMin, double tauMax, double dTau = 0.01)
+    {
+        Series series = new Series();
+        series.LegendText = "H / J analytic";
+        series.ChartType = SeriesChartType.Line;
+
+        AddData(series, ChartData.KOVerJAnalytic(tauMin, tauMax, dTau));
+        return series;
+    }
+
+    public static Series HOverJNumericSeries()
+    {
+        Series series = new Series();
+        series.LegendText = "H / J analytic";
+        series.ChartType = SeriesChartType.Line;
+
+        AddData(series, ChartData.KOVerJNumeric(tauMin, tauMax, dTau));
+        return series;
+    }
+
+    public static Series KOverJNumericSeries()
+    {
+        Series series = new Series();
+        series.LegendText = "H / J analytic";
+        series.ChartType = SeriesChartType.Line;
+
+        AddData(series, ChartData.KOVerJNumeric(tauMin, tauMax, dTau));
+        return series;
+    }
+
+
     private static void AddData(Series series, List<Tuple<double, double>> data)
     {
         foreach (Tuple<double, double> dataPoint in data)
