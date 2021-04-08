@@ -6,25 +6,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 public static class Charts
 {
     /// <summary>
-    /// Create a Chart from a sine function.
-    /// </summary>
-    /// <param name="xMin">Minimum x coordinate</param>
-    /// <param name="xMax">Maximum x coordinate</param>
-    /// <param name="dx">Stepsize of x</param>
-    /// <returns></returns>
-    public static Chart CreateSineChart(double xMin, double xMax, double dx = 0.01)
-    {
-        Chart chart = new Chart();
-        chart.Size = new System.Drawing.Size(640, 320);
-        chart.ChartAreas.Add("ChartArea1");
-        chart.Legends.Add("legend1");
-        
-        chart.Series.Add(ChartSeries.SineSeries(xMin, xMax, dx));
-
-        return chart;
-    }
-
-    /// <summary>
     /// Creates a Chart which displays intensity over the angle (in degrees) for various solutions.
     /// </summary>
     /// <param name="thetaMin">Minimum theta coodinate (in degrees)</param>
@@ -48,8 +29,8 @@ public static class Charts
         chartArea.AxisY.IsStartedFromZero = false;
         chartArea.AxisY.Title = "I / H0";
 
-        chart.Series.Add(ChartSeries.ChandrasekharSeries(thetaMin, thetaMax, dTheta));
-        chart.Series.Add(ChartSeries.MilneEddingtonSeries(thetaMin, thetaMax, dTheta));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.Chandrasekhar(thetaMin, thetaMax, dTheta), "Chandrasekhar"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MilneEddington(thetaMin, thetaMax, dTheta), "Milne-Eddington"));
 
         return chart;
     }
@@ -75,9 +56,9 @@ public static class Charts
 
         chartArea.AxisY.Title = "f / H0";
 
-        chart.Series.Add(ChartSeries.LinearSeries(3, 2, tauMin, tauMax, "J", dTau));
-        chart.Series.Add(ChartSeries.LinearSeries(0, 1, tauMin, tauMax, "H", dTau));
-        chart.Series.Add(ChartSeries.LinearSeries(1, 2/3, tauMin, tauMax, "K", dTau));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(3, 2, tauMin, tauMax, dTau), "J"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(0, 1, tauMin, tauMax, dTau), "H"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(1, 2.0 / 3.0, tauMin, tauMax, dTau), "K"));
 
         return chart;
     }
@@ -105,9 +86,9 @@ public static class Charts
     public static Chart CreateMCRTJHKChart(Simulator sim)
     {
         Chart chart = CreateJHKChart(0, sim.tauMax, 1);
-        chart.Series.Add(ChartSeries.MCRTJSeries(sim));
-        chart.Series.Add(ChartSeries.MCRTHSeries(sim));
-        chart.Series.Add(ChartSeries.MCRTKSeries(sim));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.jBoundaries), "MCRT J"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.hBoundaries), "MCRT H"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.kBoundaries), "MCRT K"));
         
         return chart;
     }
@@ -132,10 +113,10 @@ public static class Charts
         chartArea.AxisY.IsStartedFromZero = false;
         chartArea.AxisY.Title = "EddingtonFactors";
 
-        chart.Series.Add(ChartSeries.HOverJAnalyticSeries(0, sim.tauMax, 0.1));
-        chart.Series.Add(ChartSeries.KOverJAnalyticSeries(0, sim.tauMax, 0.1));
-        chart.Series.Add(ChartSeries.HOverJNumericSeries(sim));
-        chart.Series.Add(ChartSeries.KOverJNumericSeries(sim));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.HOVerJAnalytic(0, sim.tauMax, 0.1), "H / J Analytic"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJAnalytic(0, sim.tauMax, 0.1), "K / J Analytic"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.HOVerJNumeric(sim), "H / J Numeric"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJNumeric(sim), "K / J Numeric"));
 
         return chart;
     }
