@@ -7,15 +7,19 @@ namespace MCRT
         static void Main(string[] args)
         {
 
-            Simulator sim = new Simulator(500000, 10, 50, 200);
+            Simulator sim = new Simulator(50000, 10, 50, 200);
             sim.Run();
 
+            /*
             Chart MCRTChart = Charts.CreateMCRTChart(sim);
             Charts.ShowSaveChart(MCRTChart, "MCRT.png");
 
             Chart MCRTJHKChart = Charts.CreateMCRTJHKChart(sim);
             Charts.ShowSaveChart(MCRTJHKChart, "MCRTJHK.png");
+            */
 
+            Chart EddingtonFactorChart = Charts.CreateEddingtonFactorsChart(sim);
+            Charts.ShowSaveChart(EddingtonFactorChart, "EddingtonFactor.png");
         }
     }
 }   

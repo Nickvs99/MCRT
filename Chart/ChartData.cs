@@ -8,9 +8,9 @@ using System.Collections.Generic;
 public static class ChartData
 {
 
-    public static List<Tuple<double, double>> Chandrasekhar(double thetaMin, double thetaMax, double dTheta=0.01)
+    public static List<DataPoint> Chandrasekhar(double thetaMin, double thetaMax, double dTheta=0.01)
     {
-        List<Tuple<double, double>> data = new List<Tuple<double, double>>();
+        List<DataPoint> data = new List<DataPoint>();
         for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
         {
             // Map the angle in degrees to radians
@@ -19,16 +19,16 @@ public static class ChartData
             // Chandrasekhar's solution
             double y = 3.0 * (mu + 0.70692 - 0.08392 / (1.0 + 4.45808 * mu) - 0.03619 / (1.0 + 1.59178 * mu) - 0.00946 / (1.0 + 1.10319 * mu));
 
-            data.Add(new Tuple<double, double>(theta, y));
+            data.Add(new DataPoint(theta, y));
         }
 
         return data;
     }
 
 
-    public static List<Tuple<double, double>> MilneEddington(double thetaMin, double thetaMax, double dTheta = 0.01)
+    public static List<DataPoint> MilneEddington(double thetaMin, double thetaMax, double dTheta = 0.01)
     {
-        List<Tuple<double, double>> data = new List<Tuple<double, double>>();
+        List<DataPoint> data = new List<DataPoint>();
         for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
         {
             // Map the angle in degrees to radians
@@ -37,27 +37,27 @@ public static class ChartData
             // Milne-Eddington's solution
             double y = 3.0 * mu + 2;
 
-            data.Add(new Tuple<double, double>(theta, y));
+            data.Add(new DataPoint(theta, y));
         }
 
         return data;
     }
 
-    public static List<Tuple<double, double>> LinearData(double a, double b, double xMin, double xMax, double dx = 0.01)
+    public static List<DataPoint> LinearData(double a, double b, double xMin, double xMax, double dx = 0.01)
     {
-        List<Tuple<double, double>> data = new List<Tuple<double, double>>();
+        List<DataPoint> data = new List<DataPoint>();
         for (double x = xMin; x <= xMax; x += dx)
         {
             double y = a * x + b;
 
-            data.Add(new Tuple<double, double>(x, y));
+            data.Add(new DataPoint(x, y));
         }
         return data;
     }
 
-    public static List<Tuple<double, double, double, double>> MCRTMuData(Simulator sim)
+    public static List<DataPointError> MCRTMuData(Simulator sim)
     {
-        List<Tuple<double, double, double, double>> data = new List<Tuple<double, double, double, double>>();
+        List<DataPointError> data = new List<DataPointError>();
 
         // Start at the center of the first cell
         double mu = sim.muCellWidth / 2.0;
@@ -71,16 +71,16 @@ public static class ChartData
 
             double error = IOverH0 / (double)Math.Sqrt(sim.muCells[i]);
             
-            data.Add(new Tuple<double, double, double, double>(degree, IOverH0, IOverH0 - error, IOverH0 + error));
+            data.Add(new DataPointError(degree, IOverH0, IOverH0 - error, IOverH0 + error));
 
             mu += sim.muCellWidth;
         }
         return data;
     }
 
-    public static List<Tuple<double, double>> MCRTRadiatonMoments(Simulator sim, double[] boundaryValues)
+    public static List<DataPoint> MCRTRadiatonMoments(Simulator sim, double[] boundaryValues)
     {
-        List<Tuple<double, double>> data = new List<Tuple<double, double>>();
+        List<DataPoint> data = new List<DataPoint>();
         for (int i = 0; i < sim.jBoundaries.Length - 1; i++)
         {
             double x = sim.taus[i];
@@ -88,9 +88,61 @@ public static class ChartData
             // y value is in the middle of the two boundaries and scaled to the number of photons.
             double y = 0.5 * (boundaryValues[i] + boundaryValues[i + 1]) / (double)sim.nPhotons;
 
-           data.Add(new Tuple<double, double>(x, y));
+           data.Add(new DataPoint(x, y));
         }
 
+        return data;
+    }
+
+    public static List<DataPoint> HOVerJAnalytic(double thetaMin, double thetaMax, double dTheta=0.1)
+    {
+        List<DataPoint> hData = LinearData(0, 1, thetaMin, thetaMax, dTheta);
+        List<DataPoint> jData = LinearData(3, 2, thetaMin, thetaMax, dTheta);
+
+        List<DataPoint> data = new List<DataPoint>();
+        for(int i = 0; i < jData.Count; i++)
+        {
+            data.Add(new DataPoint(hData[i].x, hData[i].y / jData[i].y));
+        }
+        return data;
+    }
+
+    public static List<DataPoint> KOVerJAnalytic(double thetaMin, double thetaMax, double dTheta = 0.1)
+    {
+        List<DataPoint> kData = LinearData(1, 2.0/3.0, thetaMin, thetaMax, dTheta);
+        List<DataPoint> jData = LinearData(3, 2, thetaMin, thetaMax, dTheta);
+
+        List<DataPoint> data = new List<DataPoint>();
+        for (int i = 0; i < jData.Count; i++)
+        {
+            data.Add(new DataPoint(kData[i].x, kData[i].y / jData[i].y));
+        }
+        return data;
+    }
+
+    public static List<DataPoint> KOVerJNumeric(Simulator sim)
+    {
+        List<DataPoint> kData = MCRTRadiatonMoments(sim, sim.kBoundaries);
+        List<DataPoint> jData = MCRTRadiatonMoments(sim, sim.jBoundaries);
+        
+        List<DataPoint> data = new List<DataPoint>();
+        for (int i = 0; i < jData.Count; i++)
+        {
+            data.Add(new DataPoint(kData[i].x, kData[i].y / jData[i].y));
+        }
+        return data;
+    }
+
+    public static List<DataPoint> HOVerJNumeric(Simulator sim)
+    {
+        List<DataPoint> hData = MCRTRadiatonMoments(sim, sim.hBoundaries);
+        List<DataPoint> jData = MCRTRadiatonMoments(sim, sim.jBoundaries);
+
+        List<DataPoint> data = new List<DataPoint>();
+        for (int i = 0; i < jData.Count; i++)
+        {
+            data.Add(new DataPoint(hData[i].x, hData[i].y / jData[i].y));
+        }
         return data;
     }
 }

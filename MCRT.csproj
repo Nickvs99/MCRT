@@ -47,9 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChartSeries.cs" />
-    <Compile Include="Charts.cs" />
-    <Compile Include="ChartData.cs" />
+    <Compile Include="Chart\ChartSeries.cs" />
+    <Compile Include="Chart\Charts.cs" />
+    <Compile Include="Chart\ChartData.cs" />
+    <Compile Include="DataPoint.cs" />
     <Compile Include="Photon.cs" />
     <Compile Include="RNG.cs" />
     <Compile Include="Simulator.cs" />

@@ -157,6 +157,7 @@ public static class ChartSeries
         Series series = new Series();
         series.LegendText = "H / J analytic";
         series.ChartType = SeriesChartType.Line;
+        series.BorderWidth = 2;
 
         AddData(series, ChartData.HOVerJAnalytic(tauMin, tauMax, dTau));
         return series;
@@ -165,48 +166,52 @@ public static class ChartSeries
     public static Series KOverJAnalyticSeries(double tauMin, double tauMax, double dTau = 0.01)
     {
         Series series = new Series();
-        series.LegendText = "H / J analytic";
+        series.LegendText = "K / J analytic";
         series.ChartType = SeriesChartType.Line;
+        series.BorderWidth = 2;
 
         AddData(series, ChartData.KOVerJAnalytic(tauMin, tauMax, dTau));
         return series;
     }
 
-    public static Series HOverJNumericSeries()
+    public static Series HOverJNumericSeries(Simulator sim)
     {
         Series series = new Series();
-        series.LegendText = "H / J analytic";
+        series.LegendText = "H / J Numeric";
         series.ChartType = SeriesChartType.Line;
+        series.BorderWidth = 2;
 
-        AddData(series, ChartData.KOVerJNumeric(tauMin, tauMax, dTau));
+        AddData(series, ChartData.HOVerJNumeric(sim));
         return series;
     }
 
-    public static Series KOverJNumericSeries()
+    public static Series KOverJNumericSeries(Simulator sim)
     {
         Series series = new Series();
-        series.LegendText = "H / J analytic";
+        series.LegendText = "K / J Numeric";
         series.ChartType = SeriesChartType.Line;
+        series.BorderWidth = 2;
 
-        AddData(series, ChartData.KOVerJNumeric(tauMin, tauMax, dTau));
+        AddData(series, ChartData.KOVerJNumeric(sim));
+
         return series;
     }
 
 
-    private static void AddData(Series series, List<Tuple<double, double>> data)
+    private static void AddData(Series series, List<DataPoint> data)
     {
-        foreach (Tuple<double, double> dataPoint in data)
+        foreach (DataPoint dataPoint in data)
         {
-            series.Points.AddXY(dataPoint.Item1, dataPoint.Item2);
+            series.Points.AddXY(dataPoint.x, dataPoint.y);
         }
 
     }
 
-    private static void AddDataError(Series series, List<Tuple<double, double, double, double>> data)
+    private static void AddDataError(Series series, List<DataPointError> data)
     {
-        foreach (Tuple<double, double, double, double> dataPoint in data)
+        foreach (DataPointError dataPoint in data)
         {
-            series.Points.AddXY(dataPoint.Item1, dataPoint.Item2, dataPoint.Item3, dataPoint.Item4);
+            series.Points.AddXY(dataPoint.x, dataPoint.y, dataPoint.yLower, dataPoint.yUpper);
         }
     }
 }

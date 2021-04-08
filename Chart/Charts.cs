@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -111,16 +112,30 @@ public static class Charts
         return chart;
     }
 
+    /// <summary>
+    /// Creates a chart of the EddingtonFactors.
+    /// </summary>
+    /// <param name="sim">A completed Simulator object</param>
+    /// <returns></returns>
     public static Chart CreateEddingtonFactorsChart(Simulator sim)
     {
         Chart chart = new Chart();
         chart.Size = new System.Drawing.Size(1280, 640);
         chart.Legends.Add("legend1");
 
-        chart.Series.Add(ChartSeries.HOverJAnalyticSeries(0, sim.tauMax, 1));
-        chart.Series.Add(ChartSeries.KOverJAnalyticSeries(0, sim.tauMax, 1));
-        chart.Series.Add(ChartSeries.HOverJNumericSeries(0, sim.tauMax, 1));
-        chart.Series.Add(ChartSeries.KOverJNumericSeries(0, sim.tauMax, 1));
+        ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        
+        chartArea.AxisX.Minimum = 0;
+        chartArea.AxisX.Maximum = sim.tauMax;
+        chartArea.AxisX.Title = "Tau";
+
+        chartArea.AxisY.IsStartedFromZero = false;
+        chartArea.AxisY.Title = "EddingtonFactors";
+
+        chart.Series.Add(ChartSeries.HOverJAnalyticSeries(0, sim.tauMax, 0.1));
+        chart.Series.Add(ChartSeries.KOverJAnalyticSeries(0, sim.tauMax, 0.1));
+        chart.Series.Add(ChartSeries.HOverJNumericSeries(sim));
+        chart.Series.Add(ChartSeries.KOverJNumericSeries(sim));
 
         return chart;
     }
