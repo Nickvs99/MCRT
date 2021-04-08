@@ -12,14 +12,14 @@ public static class Charts
     /// <param name="thetaMax">Maximum theta coodinate (in degrees)</param>
     /// <param name="dTheta">Stepsize of theta (in degrees)</param>
     /// <returns></returns>
-    public static Chart CreateIntensityChart(double thetaMin, double thetaMax, double dTheta = 0.01)
+    public static Chart CreateIntensityChart(Range<double> thetaRange)
     {
         Chart chart = CreateBaseChart();
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
         ApplyBaseFont(chartArea);
 
-        chartArea.AxisX.Minimum = thetaMin;
-        chartArea.AxisX.Maximum = thetaMax;
+        chartArea.AxisX.Minimum = thetaRange.min;
+        chartArea.AxisX.Maximum = thetaRange.max;
         chartArea.AxisX.Interval = 15;
         chartArea.AxisX.Title = "Theta (degrees)";
 
@@ -27,8 +27,8 @@ public static class Charts
         chartArea.AxisY.Title = "I / H0";
 
 
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.Chandrasekhar(thetaMin, thetaMax, dTheta), "Chandrasekhar"));
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MilneEddington(thetaMin, thetaMax, dTheta), "Milne-Eddington"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.Chandrasekhar(thetaRange), "Chandrasekhar"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MilneEddington(thetaRange), "Milne-Eddington"));
 
         return chart;
     }
@@ -40,22 +40,22 @@ public static class Charts
     /// <param name="tauMax">Maximum optical depth</param>
     /// <param name="dTau">Stepsize of the optical depth</param>
     /// <returns></returns>
-    public static Chart CreateJHKChart(double tauMin, double tauMax, double dTau = 0.1)
+    public static Chart CreateJHKChart(Range<double> tauRange)
     {
         Chart chart = CreateBaseChart();
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
         ApplyBaseFont(chartArea);
-        
-        chartArea.AxisX.Minimum = tauMin;
-        chartArea.AxisX.Maximum = tauMax;
+
+        chartArea.AxisX.Minimum = tauRange.min;
+        chartArea.AxisX.Maximum = tauRange.max;
         chartArea.AxisX.Interval = 2;
         chartArea.AxisX.Title = "Tau";
 
         chartArea.AxisY.Title = "f / H0";
 
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(3, 2, tauMin, tauMax, dTau), "J"));
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(0, 1, tauMin, tauMax, dTau), "H"));
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(1, 2.0 / 3.0, tauMin, tauMax, dTau), "K"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(3, 2, tauRange), "J"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(0, 1, tauRange), "H"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.LinearData(1, 2.0 / 3.0, tauRange), "K"));
 
         return chart;
     }
@@ -68,7 +68,7 @@ public static class Charts
     public static Chart CreateMCRTChart(Simulator sim)
     {
         // Start  with the analytical solution charts
-        Chart chart = CreateIntensityChart(0, 90, 0.5);
+        Chart chart = CreateIntensityChart(new Range<double>(0.0, 90.0, 0.5));
 
         chart.Series.Add(ChartSeries.MCRTSeries(sim));
         return chart;
@@ -82,7 +82,7 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateMCRTJHKChart(Simulator sim)
     {
-        Chart chart = CreateJHKChart(0, sim.tauMax, 1);
+        Chart chart = CreateJHKChart(new Range<double>(0, sim.tauMax, 1.0));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.jBoundaries), "MCRT J"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.hBoundaries), "MCRT H"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.MCRTRadiatonMoments(sim, sim.kBoundaries), "MCRT K"));
@@ -97,7 +97,7 @@ public static class Charts
     /// <returns></returns>
     public static Chart CreateEddingtonFactorsChart(Simulator sim)
     {
-        Chart chart = CreateBaseChart();     
+        Chart chart = CreateBaseChart();
         ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
         ApplyBaseFont(chartArea);
 
@@ -108,8 +108,8 @@ public static class Charts
         chartArea.AxisY.IsStartedFromZero = false;
         chartArea.AxisY.Title = "EddingtonFactors";
 
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.HOVerJAnalytic(0, sim.tauMax, 0.1), "H / J Analytic"));
-        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJAnalytic(0, sim.tauMax, 0.1), "K / J Analytic"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.HOVerJAnalytic(new Range<double>(0, sim.tauMax, 0.1)), "H / J Analytic"));
+        chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJAnalytic(new Range<double>(0, sim.tauMax, 0.1)), "K / J Analytic"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.HOVerJNumeric(sim), "H / J Numeric"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJNumeric(sim), "K / J Numeric"));
 
@@ -133,12 +133,12 @@ public static class Charts
     {
         Font titleFont = new Font("Trebuchet MS", 15f);
         Font labelFont = new Font("Trebuchet MS", 12f);
-       
+
         area.AxisX.TitleFont = titleFont;
         area.AxisY.TitleFont = titleFont;
 
         area.AxisX.LabelStyle.Font = labelFont;
-        area.AxisY.LabelStyle.Font = labelFont;   
+        area.AxisY.LabelStyle.Font = labelFont;
     }
 
     /// <summary>

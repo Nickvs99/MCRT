@@ -8,10 +8,10 @@ using System.Collections.Generic;
 public static class ChartData
 {
 
-    public static List<DataPoint> Chandrasekhar(double thetaMin, double thetaMax, double dTheta = 0.01)
+    public static List<DataPoint> Chandrasekhar(Range<double> thetaRange)
     {
         List<DataPoint> data = new List<DataPoint>();
-        for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
+        for (double theta = thetaRange.min; theta <= thetaRange.max; theta += thetaRange.step)
         {
             // Map the angle in degrees to radians
             double mu = Math.Cos(theta * Math.PI / 180);
@@ -26,10 +26,10 @@ public static class ChartData
     }
 
 
-    public static List<DataPoint> MilneEddington(double thetaMin, double thetaMax, double dTheta = 0.01)
+    public static List<DataPoint> MilneEddington(Range<double> thetaRange)
     {
         List<DataPoint> data = new List<DataPoint>();
-        for (double theta = thetaMin; theta <= thetaMax; theta += dTheta)
+        for (double theta = thetaRange.min; theta <= thetaRange.max; theta += thetaRange.step)
         {
             // Map the angle in degrees to radians
             double mu = Math.Cos(theta * Math.PI / 180);
@@ -43,10 +43,10 @@ public static class ChartData
         return data;
     }
 
-    public static List<DataPoint> LinearData(double a, double b, double xMin, double xMax, double dx = 0.01)
+    public static List<DataPoint> LinearData(double a, double b, Range<double> xRange)
     {
         List<DataPoint> data = new List<DataPoint>();
-        for (double x = xMin; x <= xMax; x += dx)
+        for (double x = xRange.min; x <= xRange.max; x += xRange.step)
         {
             double y = a * x + b;
 
@@ -96,10 +96,10 @@ public static class ChartData
         return data;
     }
 
-    public static List<DataPoint> HOVerJAnalytic(double thetaMin, double thetaMax, double dTheta = 0.1)
+    public static List<DataPoint> HOVerJAnalytic(Range<double> thetaRange)
     {
-        List<DataPoint> hData = LinearData(0, 1, thetaMin, thetaMax, dTheta);
-        List<DataPoint> jData = LinearData(3, 2, thetaMin, thetaMax, dTheta);
+        List<DataPoint> hData = LinearData(0, 1, thetaRange);
+        List<DataPoint> jData = LinearData(3, 2, thetaRange);
 
         List<DataPoint> data = new List<DataPoint>();
         for (int i = 0; i < jData.Count; i++)
@@ -110,10 +110,10 @@ public static class ChartData
         return data;
     }
 
-    public static List<DataPoint> KOVerJAnalytic(double thetaMin, double thetaMax, double dTheta = 0.1)
+    public static List<DataPoint> KOVerJAnalytic(Range<double> thetaRange)
     {
-        List<DataPoint> kData = LinearData(1, 2.0 / 3.0, thetaMin, thetaMax, dTheta);
-        List<DataPoint> jData = LinearData(3, 2, thetaMin, thetaMax, dTheta);
+        List<DataPoint> kData = LinearData(1, 2.0 / 3.0, thetaRange);
+        List<DataPoint> jData = LinearData(3, 2, thetaRange);
 
         List<DataPoint> data = new List<DataPoint>();
         for (int i = 0; i < jData.Count; i++)

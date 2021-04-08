@@ -52,6 +52,7 @@
     <Compile Include="Code\Chart\ChartData.cs" />
     <Compile Include="Code\DataPoint.cs" />
     <Compile Include="Code\Photon.cs" />
+    <Compile Include="Code\Range.cs" />
     <Compile Include="Code\RNG.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Code\Simulator.cs" />
