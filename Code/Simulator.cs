@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Simulator
 {
@@ -21,6 +21,9 @@ public class Simulator
     public double[] jBoundaries;
     public double[] hBoundaries;
     public double[] kBoundaries;
+
+    public double scatteringAvg;
+    public double scatteringStdDev;
 
     public Simulator(int _nPhotons, double _tauMax, int _nMuCells, int _nZCells)
     {
@@ -73,7 +76,9 @@ public class Simulator
             }
         }
         Console.WriteLine();
-        Console.WriteLine($"Avg scatter events: {scatterCounters.Average()} +- {Statistics.CalcStdDev(scatterCounters)}");
+
+        scatteringAvg = scatterCounters.Average();
+        scatteringStdDev = Statistics.CalcStdDev(scatterCounters);
     }
 
     private void UpdatePhoton(Photon photon)

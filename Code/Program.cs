@@ -6,7 +6,6 @@ namespace MCRT
     {
         static void Main(string[] args)
         {
-
             Simulator sim = new Simulator(Settings.nPhotons, Settings.tauMax, Settings.nMuCells, Settings.nZCells);
             sim.Run();
 
@@ -18,6 +17,9 @@ namespace MCRT
 
             Chart EddingtonFactorChart = Charts.CreateEddingtonFactorsChart(sim);
             Charts.ShowSaveChart(EddingtonFactorChart, "EddingtonFactor.png");
+
+            Chart scatterChart = Charts.CreateScatterChart(Settings.scatterResearchRange);
+            Charts.ShowSaveChart(scatterChart, "ScatterResearch.png");
         }
     }
 }

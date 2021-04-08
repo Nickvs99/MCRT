@@ -11,5 +11,7 @@
 
     // The number of z cells. Each cell represents 1 / n  of the atmosphere.
     public static int nZCells = 200;
-}
 
+    // The range of possible tauMax values we are interested for the number of scatter events.
+    public static Range<double> scatterResearchRange = new Range<double>(2, 20, 2);
+}

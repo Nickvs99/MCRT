@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -70,7 +71,10 @@ public static class Charts
         // Start  with the analytical solution charts
         Chart chart = CreateIntensityChart(new Range<double>(0.0, 90.0, 0.5));
 
-        chart.Series.Add(ChartSeries.MCRTSeries(sim));
+        Series series = ChartSeries.SimpleErrorSeries(ChartData.MCRTMuData(sim), "MCRT");
+        series.CustomProperties = "PointWidth=2";
+        chart.Series.Add(series);
+
         return chart;
     }
 
@@ -112,6 +116,31 @@ public static class Charts
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJAnalytic(new Range<double>(0, sim.tauMax, 0.1)), "K / J Analytic"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.HOVerJNumeric(sim), "H / J Numeric"));
         chart.Series.Add(ChartSeries.SimpleLineSeries(ChartData.KOVerJNumeric(sim), "K / J Numeric"));
+
+        return chart;
+    }
+
+    /// <summary>
+    /// Creates a chart, which displays the avg and stddev of the number of times a photon package undergoes
+    /// a scatter event before escaping the atmosphere.
+    /// </summary>
+    /// <param name="tauRange">The range of tau max we are interested in.</param>
+    /// <returns></returns>
+    public static Chart CreateScatterChart(Range<double> tauRange)
+    {
+        Chart chart = CreateBaseChart();
+        ChartArea chartArea = chart.ChartAreas.Add("ChartArea1");
+        ApplyBaseFont(chartArea);
+
+        chartArea.AxisX.Minimum = Math.Min(0, tauRange.min);
+
+        chartArea.AxisX.Title = "Tau Max";
+        chartArea.AxisY.Title = "Scattering events";
+
+        Series series = ChartSeries.SimpleErrorSeries(ChartData.ScatterResearch(tauRange), "Avg scattering");
+        series.CustomProperties = "PointWidth=0.5";
+        series.BorderWidth = 2;
+        chart.Series.Add(series);
 
         return chart;
     }

@@ -151,5 +151,24 @@ public static class ChartData
 
         return data;
     }
+
+    /// <summary>
+    /// Calculates the average and stddev of the number of scatter events for a given tau max.
+    /// </summary>
+    /// <param name="tauRange"></param>
+    /// <returns></returns>
+    public static List<DataPointError> ScatterResearch(Range<double> tauRange)
+    {
+        List<DataPointError> data = new List<DataPointError>();
+        for (double tau = tauRange.min; tau < tauRange.max; tau += tauRange.step)
+        {
+            Simulator sim = new Simulator(Settings.nPhotons, tau, Settings.nMuCells, Settings.nZCells);
+            sim.Run();
+
+            data.Add(new DataPointError(tau, sim.scatteringAvg, sim.scatteringAvg + sim.scatteringStdDev, sim.scatteringAvg - sim.scatteringStdDev));
+        }
+
+        return data;
+    }
 }
 

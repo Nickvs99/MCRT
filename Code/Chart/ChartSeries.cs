@@ -8,17 +8,16 @@ public static class ChartSeries
     /// </summary>
     /// <param name="sim">A completed Simulator object</param>
     /// <returns></returns>
-    public static Series MCRTSeries(Simulator sim)
+    public static Series SimpleErrorSeries(List<DataPointError> data, string label = "Temporary")
     {
         Series series = new Series
         {
-            LegendText = "MCRT",
+            LegendText = label,
             ChartType = SeriesChartType.ErrorBar,
             YValuesPerPoint = 3,
-            CustomProperties = $"PointWidth=2"
         };
 
-        AddDataError(series, ChartData.MCRTMuData(sim));
+        AddDataError(series, data);
 
         return series;
     }
