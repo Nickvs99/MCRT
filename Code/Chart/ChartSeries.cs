@@ -6,7 +6,7 @@ public static class ChartSeries
     /// <summary>
     /// Creates a Series with the results of a MCRT simulation.
     /// </summary>
-    /// <param name="sim">A completed Simulator object</param>
+    /// <param name="data">The list of datapoints.</param>
     /// <returns></returns>
     public static Series SimpleErrorSeries(List<DataPointError> data, string label = "Temporary")
     {

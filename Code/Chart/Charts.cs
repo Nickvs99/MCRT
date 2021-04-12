@@ -9,9 +9,7 @@ public static class Charts
     /// <summary>
     /// Creates a Chart which displays intensity over the angle (in degrees) for various solutions.
     /// </summary>
-    /// <param name="thetaMin">Minimum theta coodinate (in degrees)</param>
-    /// <param name="thetaMax">Maximum theta coodinate (in degrees)</param>
-    /// <param name="dTheta">Stepsize of theta (in degrees)</param>
+    /// <param name="thetaRange">Range object of theta(in degrees)</param>
     /// <returns></returns>
     public static Chart CreateIntensityChart(Range<double> thetaRange)
     {
@@ -37,9 +35,7 @@ public static class Charts
     /// <summary>
     /// Creates a chart which displays the analytical solutions the mean intensity (J), flux (H), radiation pressure(K)
     /// </summary>
-    /// <param name="tauMin">Minimum optical depth</param>
-    /// <param name="tauMax">Maximum optical depth</param>
-    /// <param name="dTau">Stepsize of the optical depth</param>
+    /// <param name="tauRange">Range object of the optical depth</param>
     /// <returns></returns>
     public static Chart CreateJHKChart(Range<double> tauRange)
     {
